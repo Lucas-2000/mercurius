@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {% block title %}
+  <title>Model</title>
+  {% endblock %}
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+  <div class="bg-primary">
+    <header class="container">
+        {% block menu %}
+        <nav class="navbar navbar-expand-lg">
+          <a href="{% url 'index' %}">
+            <img src="{% static 'img/maua-logo.png' %}" alt="logo" width="60" class="rounded-circle">
+          </a>
+          <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link text-light" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-light" href="{% url 'about' %}">Sobre</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link text-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Módulos
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'neighborhoods' %}">Bairros</a></li>
+                    <li><a class="dropdown-item" href="{% url 'employers' %}">Funcionários</a></li>
+                    <li><a class="dropdown-item" href="{% url 'transactions' %}">Transações</a></li>
+                  </ul>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                  <a class="nav-link text-light" href="{% url 'index' %}">Ajuda</a>
+                </li>
+              </ul>
+            </div>
+            {% if request.user.is_authenticated %}
+            <div>
+              <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link text-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ request.user }}
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            {% else %}
+            <div>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                  <ul class="navbar-nav">
+                      <li><a class="nav-link text-light" href="{% url 'register' %}">Registrar</a></li>
+                  </ul>
+                  <ul class="navbar-nav">
+                      <li><a class="nav-link text-light" href="{% url 'login' %}">Login</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </nav>
+        {% endblock %}
+      </header>
+    </div>
+    
+    <div class="bg-secondary">
+      <div class="container">
+        {% block contrast %}
+          Figuras de destaque
+        {% endblock %}
+      </div>
+    </div>
+
+    <div class="container mt-3 mb-3">
+      {% block content %}
+        <h3>Model Template</h3>
+        
+        <p>Conteúdo do site</p>
+      {% endblock %}
+    </div>
+
+    <div class="bg-light fixed-bottom">
+      <footer class="container">
+        {% block footer %}
+          <p class="text-secondary text-center">Site desenvolvido em 2022 por Lucas Marchesoni. Todos os direitos reservados &copy;</p>
+        {% endblock %}
+      </footer>
+    </div>
+  </div>
+
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.esm.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

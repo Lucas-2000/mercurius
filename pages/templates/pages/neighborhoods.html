@@ -1,0 +1,92 @@
+{% extends 'pages/model.html' %}
+{% load static %}
+
+{% block title %}
+<title>Bairros | Mercurius</title>
+{% endblock %}
+
+{% block contrast %}
+
+{% endblock %}
+
+{% block content %}
+  <h3>Bairros</h3>
+  <p class="lead">Consultar os bairros existentes na cidade de Mauá</p>
+  <a href="{% url 'create-neighborhood' %}">Cadastrar bairro</a>
+  <hr>
+  <form action="" method="GET">
+    <input type="text" name="nome" id="" value="{{ request.GET.nome }}" class="p-1 border" autocomplete="off" placeholder="Pesquisar nome...">
+    <button class="btn btn-primary" type="submit">Buscar</button>
+    <a class="btn btn-light" href="{% url 'neighborhoods' %}">Limpar</a>
+  </form>
+  <hr>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>População</th>
+        <th>Opções</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for field in object_list %}
+        <tr>
+          <td>{{field.nome}}</td>
+          <td>{{field.populacao}}</td>
+          <td>
+            <a class="btn btn-warning btn-sm" href="{% url 'update-neighborhood' field.pk %}">Editar</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'delete-neighborhood' field.pk %}">Excluir</a>
+          </td>
+        </tr>
+        {% empty%}
+        <tr>
+          <td colspan="3">Nenhum campo registrado</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+
+      {% if request.GET.nome %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1&nome={{request.GET.nome}}">Primeira</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}&nome={{request.GET.nome}}">Voltar</a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">Primeira</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}">Voltar</a>
+        </li>
+      {% endif %}
+
+    {% endif %}
+
+    <li class="page-item">
+      <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      {% if request.GET.nome %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}&nome={{request.GET.nome}}">Próxima</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.paginator_num_pages}}&nome={{request.GET.nome}}">Última</a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}">Próxima</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.paginator_num_pages}}">Última</a>
+        </li>
+      {% endif %}
+    {% endif %}
+  </ul>
+{% endblock %}

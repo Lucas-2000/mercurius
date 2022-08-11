@@ -1,0 +1,100 @@
+{% extends 'pages/model.html' %}
+{% load static %}
+
+{% block title %}
+<title>Transações | Mercurius</title>
+{% endblock %}
+
+{% block contrast %}
+
+{% endblock %}
+
+{% block content %}
+  <h3>Transações</h3>
+  <p class="lead">Consultar as transações da Prefeitura de Mauá</p>
+  <a href="{% url 'create-transaction' %}">Cadastrar transação</a>
+  <hr>
+  <form action="" method="GET">
+    <input type="text" name="descricao" id="" value="{{ request.GET.descricao }}" class="p-1 border" autocomplete="off" placeholder="Pesquisar descricao...">
+    <button class="btn btn-primary" type="submit">Buscar</button>
+    <a class="btn btn-light" href="{% url 'transactions' %}">Limpar</a>
+  </form>
+  <hr>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Tipo</th>
+        <th>Criação</th>
+        <th>Usuário</th>
+        <th>Comprovante</th>
+        <th>Opções</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for field in object_list %}
+        <tr>
+          <td>{{field.descricao}}</td>
+          <td>{{field.valor}}</td>
+          <td>{{field.tipo}}</td>
+          <td>{{field.data_criacao|date:"d/m/Y"}}</td>
+          <td>{{field.usuario}}</td>
+          <td><a class="btn btn-primary btn-sm" href="{{ field.comprovante.url }}">Ver comprovante</a></td>
+          <td>
+            <a class="btn btn-warning btn-sm" href="{% url 'update-transaction' field.pk %}">Editar</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'delete-transaction' field.pk %}">Excluir</a>
+          </td>
+        </tr>
+        {% empty%}
+        <tr>
+          <td colspan="3">Nenhum campo registrado</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+
+      {% if request.GET.nome %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1&descricao={{request.GET.descricao}}">Primeira</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}&descricao={{request.GET.descricao}}">Voltar</a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">Primeira</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}">Voltar</a>
+        </li>
+      {% endif %}
+
+    {% endif %}
+
+    <li class="page-item">
+      <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      {% if request.GET.nome %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}&descricao={{request.GET.descricao}}">Próxima</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.paginator_num_pages}}&descricao={{request.GET.descricao}}">Última</a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}">Próxima</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.paginator_num_pages}}">Última</a>
+        </li>
+      {% endif %}
+    {% endif %}
+  </ul>
+{% endblock %}

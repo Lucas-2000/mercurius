@@ -1,0 +1,28 @@
+{% extends 'pages/model.html' %}
+{% load static %}
+
+{% block title %}
+<title>Deletar | Mercurius</title>
+{% endblock %}
+
+{% block contrast %}
+
+{% endblock %}
+
+{% block content %}
+  <h3>Deletar</h3>
+  <p class="lead">Confirme para deletar o registro definitivamente</p>
+  <a href="{% url 'index' %}">Voltar</a>  
+  <hr>
+  <form action="" method="POST">
+    <p>
+      Deseja excluir o registro: <strong>{{ object }}</strong>?
+    </p>
+
+    {% csrf_token%}
+
+    {{form.as_p}}
+
+    <input class="btn btn-danger" type="submit" name="submit" value="Deletar">
+  </form>
+{% endblock %}
